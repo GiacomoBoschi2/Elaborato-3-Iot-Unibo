@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "../lib/Scheduling/Scheduler.h"
 #include "../lib/Tasks/DoorTask.h"
+#include "../lib/Scheduling/SharedData.h"
 
 #define BASE_PERIOD 50
 
@@ -8,6 +9,7 @@
 
 Scheduler* sched;
 DoorTask* doorTask;
+SharedData share_data;
 
 void setup() {
   sched = new Scheduler();

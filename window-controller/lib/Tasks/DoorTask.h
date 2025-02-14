@@ -13,7 +13,8 @@ public:
 private:
   int pin;
   Door* door;
-  enum{READ_FROM_SYSTEM,READ_FROM_POT,NOT_READING} status;
+  enum State {READ_FROM_SYSTEM,READ_FROM_POT,NOT_READING} status;
+  int updateStatus();
 };
 
 #endif

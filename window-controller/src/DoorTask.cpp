@@ -1,4 +1,7 @@
 #include "../lib/Tasks/DoorTask.h"
+#include "../lib/Scheduling/SharedData.h"
+
+extern SharedData shared_data;
 
 DoorTask::DoorTask(int pin){
     DoorTask::door = new Door(pin);
@@ -10,6 +13,9 @@ void DoorTask::init(int period){
 }
 
 void DoorTask::tick(){
+
+    status = (State)updateStatus();
+
     if(status==READ_FROM_SYSTEM){
         door->setAngle(0);
     }
@@ -21,3 +27,11 @@ void DoorTask::tick(){
     }
 }
 
+int DoorTask::updateStatus(){
+    if(status!=NOT_READING){
+        if(shared_data.switch_mode){
+            return (status==READ_FROM_SYSTEM) ? READ_FROM_POT : READ_FROM_SYSTEM;
+        }
+    }
+    return NOT_READING;
+}
