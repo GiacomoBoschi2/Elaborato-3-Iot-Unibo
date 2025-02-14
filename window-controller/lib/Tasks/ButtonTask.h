@@ -4,9 +4,9 @@
 #include "Task.h"
 #include "Button.h"
 
-class ButtonsTask: public Task{
+class ButtonTask: public Task{
     public:
-        ButtonsTask(int buttonPin);
+        ButtonTask(int buttonPin);
         void init(int period);
         void tick();
     private:

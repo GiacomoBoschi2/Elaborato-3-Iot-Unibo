@@ -30,6 +30,7 @@ void DoorTask::tick(){
 int DoorTask::updateStatus(){
     if(status!=NOT_READING){
         if(shared_data.switch_mode){
+            shared_data.switch_mode = 0;
             return (status==READ_FROM_SYSTEM) ? READ_FROM_POT : READ_FROM_SYSTEM;
         }
     }
