@@ -11,7 +11,7 @@ void DoorTask::init(int period){
 
 void DoorTask::tick(){
     if(status==READ_FROM_SYSTEM){
-        door->setAngle(120);
+        door->setAngle(0);
     }
     else if(status==READ_FROM_POT){
         door->setAngle(60);
