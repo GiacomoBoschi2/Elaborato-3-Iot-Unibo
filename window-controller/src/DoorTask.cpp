@@ -21,13 +21,12 @@ void DoorTask::tick(){
 
     if(status==READ_FROM_SYSTEM){
         door_rot=150;
-       
     }
     else if(status==READ_FROM_POT){
-        door_rot=(pot->read());
+        door_rot=pot->read();
     }
     else{
-        door_rot=(90);
+        door_rot=90;
     }
      door->setAngle(door_rot);
      share_data.door_rotation = door_rot;
@@ -35,7 +34,6 @@ void DoorTask::tick(){
 
 int DoorTask::updateStatus(){
     if(status!=NOT_READING){
-        Serial.println(share_data.switch_mode);
         if(share_data.switch_mode){
             share_data.switch_mode = 0;
             return (status==READ_FROM_SYSTEM) ? READ_FROM_POT : READ_FROM_SYSTEM;

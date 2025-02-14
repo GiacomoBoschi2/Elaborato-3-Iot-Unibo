@@ -15,12 +15,10 @@ void LcdTask::init(int period){
 }
 
 void LcdTask::tick(){
-    String door_rotation = "Current rotation (in degrees):"+share_data.door_rotation;
-    char* msg = (char*)malloc(128);
-    door_rotation.toCharArray(msg,128,0);
+    char msg[32];
+    sprintf(msg, "Current rotation (in degrees): %d", share_data.door_rotation);
     updateMsg(msg);
     lcd->message(currentMsg);
-
 }
 
 void LcdTask::updateMsg(const char* msg){

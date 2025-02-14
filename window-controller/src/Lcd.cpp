@@ -15,10 +15,10 @@ void Lcd::clear(){
 }
 
 void Lcd::message(const char* msg){
+    lcd.backlight();
+    lcd.clear();
     lcd.setCursor(0,0);
-    for(int i = 0;i<strlen(msg);i++){
-        lcd.write(msg[i]);
-    }
+    lcd.print(msg);
 }
 
 void Lcd::close(){

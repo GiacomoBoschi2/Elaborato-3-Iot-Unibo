@@ -12,7 +12,7 @@ public:
 private:
   void updateMsg(const char* msg);
   Lcd* lcd;
-  const char* currentMsg;
+  char* currentMsg;
   enum State {DISPLAY_MANUAL_MODE,DO_NOT_DISPLAY_MANUAL_MODE} state;
 };
 

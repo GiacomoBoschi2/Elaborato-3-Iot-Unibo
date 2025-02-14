@@ -31,13 +31,13 @@ void setup() {
   doorTask->init(BASE_PERIOD*2);
   buttonTask = new ButtonTask(BUTTON_PIN);
   buttonTask->init(BASE_PERIOD*3);
-  lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
-  lcdTask->init(BASE_PERIOD*4);
+  //lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
+  //lcdTask->init(BASE_PERIOD*4);
 
   //add tasks
   sched->addTask(doorTask);
   sched->addTask(buttonTask);
-  sched->addTask(lcdTask);
+  //sched->addTask(lcdTask);
 }
 
 void loop() {
