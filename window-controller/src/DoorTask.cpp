@@ -1,7 +1,7 @@
 #include "../lib/Tasks/DoorTask.h"
 #include "../lib/Scheduling/SharedData.h"
 
-extern SharedData shared_data;
+extern struct SharedData shared_data;
 
 DoorTask::DoorTask(int pin){
     DoorTask::door = new Door(pin);

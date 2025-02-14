@@ -1,7 +1,7 @@
 #include "../lib/Tasks/ButtonTask.h"
 #include "../lib/Scheduling/SharedData.h"
 
-extern SharedData shared_data;
+extern struct SharedData shared_data;
 
 ButtonTask::ButtonTask(int pin){
     ButtonTask::button_handler = new Button(pin);
