@@ -1,7 +1,7 @@
 #include "../lib/Tasks/DoorTask.h"
 #include "../lib/Scheduling/SharedData.h"
 
-extern struct SharedData shared_data;
+extern struct SharedData share_data;
 
 DoorTask::DoorTask(int pin){
     DoorTask::door = new Door(pin);
@@ -29,8 +29,8 @@ void DoorTask::tick(){
 
 int DoorTask::updateStatus(){
     if(status!=NOT_READING){
-        if(shared_data.switch_mode){
-            shared_data.switch_mode = 0;
+        if(share_data.switch_mode){
+            share_data.switch_mode = 0;
             return (status==READ_FROM_SYSTEM) ? READ_FROM_POT : READ_FROM_SYSTEM;
         }
     }
