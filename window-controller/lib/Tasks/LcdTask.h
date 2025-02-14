@@ -7,15 +7,13 @@
 class LcdTask:public Task{
 public:
   LcdTask(int address, int cols, int rows);
-  void updateMsg(const char* msg);
   void tick();
   void init(int period);
 private:
+  void updateMsg(const char* msg);
   Lcd* lcd;
-  unsigned long timerDelay;
-  int timerOn;
   const char* currentMsg;
-  long long previous_door_status;
+  enum State {DISPLAY_MANUAL_MODE,DO_NOT_DISPLAY_MANUAL_MODE} state;
 };
 
 #endif

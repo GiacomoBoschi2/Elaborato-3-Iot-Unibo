@@ -17,16 +17,20 @@ void DoorTask::init(int period){
 void DoorTask::tick(){
 
     status = updateStatus();
+    int door_rot = 0;
 
     if(status==READ_FROM_SYSTEM){
-        door->setAngle(150);
+        door_rot=150;
+       
     }
     else if(status==READ_FROM_POT){
-        door->setAngle(pot->read());
+        door_rot=(pot->read());
     }
     else{
-        door->setAngle(90);
+        door_rot=(90);
     }
+     door->setAngle(door_rot);
+     share_data.door_rotation = door_rot;
 }
 
 int DoorTask::updateStatus(){
