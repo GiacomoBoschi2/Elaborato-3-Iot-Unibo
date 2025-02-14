@@ -4,9 +4,9 @@
 
 extern struct SharedData share_data;
 
-DoorTask::DoorTask(int pin){
-    DoorTask::door = new Door(pin);
-    Serial.begin(9600);
+DoorTask::DoorTask(int doorPin,int potPin){
+    DoorTask::door = new Door(doorPin);
+    DoorTask:pot = new Potentiometer(potPin);
 }
 
 void DoorTask::init(int period){
@@ -22,7 +22,7 @@ void DoorTask::tick(){
         door->setAngle(150);
     }
     else if(status==READ_FROM_POT){
-        door->setAngle(60);
+        door->setAngle(pot->read());
     }
     else{
         door->setAngle(90);

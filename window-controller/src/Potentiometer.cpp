@@ -16,5 +16,5 @@ int Potentiometer::read(bool convert_to_angles=true){
 }
 
 int Potentiometer::voltage_to_angles(int voltage){
-    return (voltage*45)/(256);
+    return map(voltage, 0, 1023, 0, 180);
 }

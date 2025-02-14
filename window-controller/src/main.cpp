@@ -8,6 +8,7 @@
 
 #define DOOR_PIN 9
 #define BUTTON_PIN 2
+#define POTENTIOMETER_PIN A0
 
 Scheduler* sched;
 DoorTask* doorTask;
@@ -19,7 +20,7 @@ void setup() {
   sched->init(BASE_PERIOD);
 
   //create tasks
-  doorTask = new DoorTask(DOOR_PIN);
+  doorTask = new DoorTask(DOOR_PIN,POTENTIOMETER_PIN);
   doorTask->init(BASE_PERIOD*2);
   buttonTask = new ButtonTask(BUTTON_PIN);
   buttonTask->init(BASE_PERIOD*3);
