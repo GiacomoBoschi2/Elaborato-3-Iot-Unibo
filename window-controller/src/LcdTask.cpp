@@ -10,6 +10,8 @@ LcdTask::LcdTask(int address, int cols, int rows){
 
 void LcdTask::init(int period){
     Task::init(period);
+    lcd->init();
+    state = DO_NOT_DISPLAY_MANUAL_MODE;
 }
 
 void LcdTask::tick(){
