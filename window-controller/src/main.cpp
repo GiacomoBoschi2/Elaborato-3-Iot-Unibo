@@ -22,7 +22,14 @@ ButtonTask* buttonTask;
 LcdTask* lcdTask;
 SharedData share_data;
 
+void initalizeSharedData(){
+  share_data.door_rotation = 0;
+  share_data.manual_mode_on = 0;
+  share_data.switch_mode = 0;
+}
+
 void setup() {
+  initalizeSharedData();
   sched = new Scheduler();
   sched->init(BASE_PERIOD);
 
@@ -31,13 +38,13 @@ void setup() {
   doorTask->init(BASE_PERIOD*2);
   buttonTask = new ButtonTask(BUTTON_PIN);
   buttonTask->init(BASE_PERIOD*3);
-  //lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
-  //lcdTask->init(BASE_PERIOD*4);
+  lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
+  lcdTask->init(BASE_PERIOD*5);
 
   //add tasks
   sched->addTask(doorTask);
   sched->addTask(buttonTask);
-  //sched->addTask(lcdTask);
+  sched->addTask(lcdTask);
 }
 
 void loop() {

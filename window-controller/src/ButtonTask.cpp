@@ -15,13 +15,15 @@ void ButtonTask::init(int period){
 
 void ButtonTask::tick(){
     int press = button_handler->isPressed();
-    if(press){
-        status = PRESSED;
-    }
-    else if(!press && status==PRESSED)
-    {
-        share_data.switch_mode = 1;
-        status = NOT_PRESSED;
+    if(!share_data.switch_mode){
+        if(press){
+            status = PRESSED;
+        }
+        else if(!press && status==PRESSED)
+        {
+            share_data.switch_mode = 1;
+            status = NOT_PRESSED;
+        }   
     }
 }
 

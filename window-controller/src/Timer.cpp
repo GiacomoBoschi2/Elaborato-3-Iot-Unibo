@@ -16,3 +16,7 @@ void Timer::waitForNextTick(){
   while((last_timestamp_tracked =millis())-last_tick<base_period) {}
   last_tick = last_timestamp_tracked;
 }
+
+unsigned long Timer::getTotalTimeElapsed(){
+  return millis();
+}

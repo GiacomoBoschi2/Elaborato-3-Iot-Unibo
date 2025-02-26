@@ -6,7 +6,7 @@ class Potentiometer{
     Potentiometer(int pin);
     int read(bool convert_to_angles = true);
     private:
-    int voltage_to_angles(int volt);
+    long voltage_to_angles(int volt);
     int pin;
 };
 #endif

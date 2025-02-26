@@ -11,6 +11,7 @@ public:
   /* period in ms */
   void setupPeriod(int period);  
   void waitForNextTick();
+  unsigned long getTotalTimeElapsed(); // for debugging purpose only
 
 private:
   unsigned long last_tick;

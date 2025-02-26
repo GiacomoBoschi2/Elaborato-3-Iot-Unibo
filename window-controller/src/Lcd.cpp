@@ -1,16 +1,12 @@
-#include "../lib/Components/Lcd.h"
-#include <Arduino.h>
+#include "../Components/Lcd.h"
 
-Lcd::Lcd(int address, int cols, int rows) : lcd(address, cols, rows) {
+Lcd::Lcd(int address, int cols, int rows):lcd(address,cols,rows){
 
 }
 
 void Lcd::init(){
     lcd.init();
     lcd.backlight();
-}
-
-void Lcd::clear(){
     lcd.clear();
 }
 
@@ -21,6 +17,11 @@ void Lcd::message(const char* msg){
     lcd.print(msg);
 }
 
+void Lcd::clear(){
+    lcd.clear();
+}
+
 void Lcd::close(){
-    
+    lcd.clear();
+    lcd.noBacklight();
 }

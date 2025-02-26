@@ -5,7 +5,7 @@ extern struct SharedData share_data;
 
 LcdTask::LcdTask(int address, int cols, int rows){
     this->lcd = new Lcd(address, cols, rows);
-    this->currentMsg = "";
+    this->currentMsg = "Current rotation (in angles):";
 }
 
 void LcdTask::init(int period){
@@ -15,7 +15,7 @@ void LcdTask::init(int period){
 }
 
 void LcdTask::tick(){
-    char msg[32];
+    char msg[64];
     sprintf(msg, "Current rotation (in degrees): %d", share_data.door_rotation);
     updateMsg(msg);
     lcd->message(currentMsg);

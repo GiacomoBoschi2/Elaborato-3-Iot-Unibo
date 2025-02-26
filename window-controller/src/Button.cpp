@@ -6,6 +6,5 @@ Button::Button(int pin){
 }
 
 bool Button::isPressed(){
-    delay(1);
     return  digitalRead(Button::pin);
 }

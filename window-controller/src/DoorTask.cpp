@@ -17,7 +17,7 @@ void DoorTask::init(int period){
 void DoorTask::tick(){
 
     status = updateStatus();
-    int door_rot = 0;
+    long door_rot = 0;
 
     if(status==READ_FROM_SYSTEM){
         door_rot=150;

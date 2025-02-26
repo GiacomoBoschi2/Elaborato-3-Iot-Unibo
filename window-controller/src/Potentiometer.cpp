@@ -15,6 +15,6 @@ int Potentiometer::read(bool convert_to_angles=true){
     return read_value;
 }
 
-int Potentiometer::voltage_to_angles(int voltage){
+long Potentiometer::voltage_to_angles(int voltage){
     return map(voltage, 0, 1023, 0, 180);
 }
