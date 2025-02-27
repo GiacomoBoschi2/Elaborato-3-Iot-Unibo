@@ -1,18 +1,26 @@
 #include <Arduino.h>
+#include "../lib/Scheduling/Scheduler.h"
+#include "../lib/Tasks/LedTask.h"
+#include "../lib/Scheduling/Timer.h"
 
-// put function declarations here:
-int myFunction(int, int);
+#define RED_PIN 12
+#define GREEN_PIN 14
+
+#define BASE_PERIOD 100
+
+Scheduler* sched;
+LedTask* ledTask;
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  sched = new Scheduler();
+  sched->init(BASE_PERIOD);
+
+  ledTask = new LedTask(GREEN_PIN,RED_PIN);
+  ledTask -> init(BASE_PERIOD*2);
+  sched->addTask(ledTask);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  sched->schedule();
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}
