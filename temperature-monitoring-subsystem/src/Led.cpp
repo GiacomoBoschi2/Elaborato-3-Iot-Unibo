@@ -2,18 +2,18 @@
 
 
 Led::Led(int pin){
-    Led::isOn = 0;
+    Led::isOn = LOW;
     Led::pin = pin;
     pinMode(pin,OUTPUT);
     digitalWrite(Led::pin,LOW);
 }
 
 void Led::switchOn(){
-    isOn = 1;
+    isOn = HIGH;
     digitalWrite(Led::pin,isOn);
 }
 
 void Led::switchOff(){
-    isOn = 0;
+    isOn = LOW;
     digitalWrite(Led::pin,isOn);
 }

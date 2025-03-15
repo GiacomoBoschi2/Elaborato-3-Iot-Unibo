@@ -1,4 +1,7 @@
 #include "../lib/Tasks/LedTask.h"
+#include "../lib/Scheduling/SharedData.h"
+
+extern SharedData share_data;
 
 LedTask::LedTask(int greenPin,int redPin){
     LedTask::greenPin = greenPin;
@@ -12,6 +15,13 @@ void LedTask::init(int period){
 }
 
 void LedTask::tick(){
-    greenLed->switchOn();
-    redLed->switchOff();
+    if(share_data.network_ok & share_data.server_ok){
+        greenLed->switchOn();
+        redLed->switchOff();
+    }
+    else{
+        greenLed->switchOff();
+        redLed->switchOn();
+    }
+
 }

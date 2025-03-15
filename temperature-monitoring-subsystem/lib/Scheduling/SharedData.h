@@ -3,9 +3,10 @@
 
 struct SharedData
 {
-    int switch_mode;
-    int manual_mode_on;
-    long door_rotation;
+    long frequency = 1000;
+    double temperature = 0;
+    int network_ok = 1;
+    int server_ok = 1;
 };
 
 #endif

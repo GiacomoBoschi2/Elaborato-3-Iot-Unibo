@@ -2,14 +2,17 @@
 #include "../lib/Scheduling/Scheduler.h"
 #include "../lib/Tasks/LedTask.h"
 #include "../lib/Scheduling/Timer.h"
+#include "../lib/Tasks/TempSensorTask.h"
+#include "../lib/Scheduling/SharedData.h"
 
-#define RED_PIN 12
-#define GREEN_PIN 14
+#define RED_PIN 27
+#define GREEN_PIN 26
 
 #define BASE_PERIOD 100
 
 Scheduler* sched;
 LedTask* ledTask;
+SharedData share_data;
 
 void setup() {
   sched = new Scheduler();
