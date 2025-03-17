@@ -4,16 +4,22 @@
 #include "../lib/Tasks/LedTask.h"
 #include "../lib/Scheduling/Timer.h"
 #include "../lib/Tasks/TempSensorTask.h"
+#include "../lib/Tasks/NetworkTask.h"
 
 
 #define RED_PIN 27
 #define GREEN_PIN 26
 #define TEMP_PIN 34
+#define MAC_ADDRESS {0xec,0x62,0x60,0x9c,0x53,0xdc}
+
 #define BASE_PERIOD 100
 
 Scheduler* sched;
 LedTask* ledTask;
 TempSensorTask* tempTask;
+NetworkTask* network_task;
+IPAddress* address = new IPAddress(127,0,0,1);
+byte mac[] = MAC_ADDRESS;
 SharedData share_data;
 
 void setup() {
@@ -27,6 +33,10 @@ void setup() {
   tempTask = new TempSensorTask(TEMP_PIN);
   tempTask->init(BASE_PERIOD*4);
   sched->addTask(tempTask);
+
+  network_task = new NetworkTask(address ,mac);
+  network_task->init(BASE_PERIOD*3);
+  sched->addTask(network_task);
 }
 
 void loop() {
