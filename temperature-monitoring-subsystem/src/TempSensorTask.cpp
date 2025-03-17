@@ -1,11 +1,12 @@
 #include "TempSensorTask.h"
 #include <Arduino.h>
-#include "../lib/scheduling/SharedData.h"
+#include "../lib/Scheduling/SharedData.h"
 
 extern SharedData share_data;
 
 TempSensorTask::TempSensorTask(int pin){
     sensor = new TempSensor(pin);
+    Serial.begin(9600);
 }
 
 void TempSensorTask::init(int period) {
@@ -21,5 +22,6 @@ void TempSensorTask::tick(){
         saved_period = 0;
         double measure = sensor->getTemperature();
         share_data.temperature = measure;
+        Serial.println(measure);
     }
 }
