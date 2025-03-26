@@ -13,6 +13,8 @@ public:
     int tryWrite(double message);
     int tryWrite(int message);
     int tryWriteLine(char* message);
+    int tryWriteLine(int message);
+    int tryWriteLine(double message);
 };
 
 

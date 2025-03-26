@@ -26,5 +26,4 @@ void Scheduler::schedule(){
       taskList[i]->tick();
     }
   }
-  Serial.println(timer.getTotalTimeElapsed());
 }

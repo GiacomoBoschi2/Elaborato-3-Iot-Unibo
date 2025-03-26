@@ -4,6 +4,7 @@
 #include "../lib/Tasks/ButtonTask.h"
 #include "../lib/Tasks/LcdTask.h"
 #include "../lib/Scheduling/SharedData.h"
+#include "../lib/Tasks/SerialTask.h"
 
 
 #define BASE_PERIOD 50
@@ -20,6 +21,7 @@ Scheduler* sched;
 DoorTask* doorTask;
 ButtonTask* buttonTask;
 LcdTask* lcdTask;
+SerialTask* serialTask;
 SharedData share_data;
 
 void initalizeSharedData(){
@@ -40,11 +42,14 @@ void setup() {
   buttonTask->init(BASE_PERIOD*3);
   lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
   lcdTask->init(BASE_PERIOD*5);
+  serialTask = new SerialTask();
+  serialTask->init(BASE_PERIOD*5);
 
   //add tasks
   sched->addTask(doorTask);
   sched->addTask(buttonTask);
   sched->addTask(lcdTask);
+  sched->addTask(serialTask);
 }
 
 void loop() {
