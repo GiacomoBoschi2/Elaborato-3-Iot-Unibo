@@ -4,6 +4,7 @@
 #include "Task.h"
 #include <Ethernet.h>   
 #include <PubSubClient.h>
+#include <WiFi.h>
 
 class NetworkTask: public Task{
     public:
@@ -11,6 +12,7 @@ class NetworkTask: public Task{
         void init(int period);
         void tick();
     private:
+        void init_wifi(char * ssid, char* password);
         IPAddress* address;
         byte* mac;
         PubSubClient* client;

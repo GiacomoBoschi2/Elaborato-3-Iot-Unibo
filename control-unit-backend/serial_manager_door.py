@@ -37,6 +37,7 @@ class ArduinoCommunicator:
     
     def send_rotation(self):
         self.arduino.write(str(self.current_rotation*100).encode())
+    
 
 
 
