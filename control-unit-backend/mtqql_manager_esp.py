@@ -1,17 +1,36 @@
-import paho.mqtt.client as mqtt
+import sys
+import paho.mqtt.client as paho
 
-def on_connect(client, userdata, flags, reason_code, properties):
-    print(f"Connected with result code {reason_code}")
-    # Subscribing in on_connect() means that if we lose the connection and
-    # reconnect then subscriptions will be renewed.
-    client.subscribe("$SYS/#")
+client = paho.Client()
 
-# The callback for when a PUBLISH message is received from the server.
-def on_message(client, userdata, msg):
-    print(msg.topic+" "+str(msg.payload))
+class subscriber_handler:
+    def __init__(self,server = "localhost",port = 1883, N=5):
+        self.server = server
+        self.port = port
+        self.frequency_publisher= paho.Client()
+        self.frequency_publisher.connect(server,port,60)
+        self.N = N #numero campioni da tenere traccia
+        self.measures = []
+    
+    def update_temperatures(self,temperature):
+        if(len(self.measures)==self.N):
+            self.measures = self.measures[1:]
+        self.measures.append(temperature)
 
-mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-mqttc.on_connect = on_connect
-mqttc.on_message = on_message
+    def get_info_measurements(self): #returns a tuple (min,max,avg)
+        min_t = min(self.measures)
+        max_t = max(self.measures)
+        avg = sum(self.measures)/len(self.measures)
+        return (min_t,max_t,avg)
 
-mqttc.connect("mqtt.eclipseprojects.io", 1883, 60)
+    def updateFrequency(self,frequency):
+        self.frequency_publisher.publish("frequency-topic",f"freq:{str(frequency)}")
+
+    def getLastMeasurment(self):
+        if len(self.measures)==0:
+            return 0
+        return self.measures[-1]
+
+
+    
+    

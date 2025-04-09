@@ -8,14 +8,16 @@
 
 class NetworkTask: public Task{
     public:
-        NetworkTask(IPAddress* address, byte mac_address[]);
+        NetworkTask(char * ssid, char* password, char* mqtt_server);
         void init(int period);
         void tick();
     private:
-        void init_wifi(char * ssid, char* password);
-        IPAddress* address;
-        byte* mac;
-        PubSubClient* client;
+        void attempt_connect();
+        char* ssid;
+        char* password;
+        char* mqtt_server;
+        WiFiClient espClient;
+        PubSubClient client;
 
 };
 

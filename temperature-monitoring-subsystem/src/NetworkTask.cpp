@@ -1,33 +1,24 @@
 #include "../lib/Tasks/NetworkTask.h"
 
-
-NetworkTask::NetworkTask(IPAddress* address, byte* mac_address){
-    NetworkTask::address = address;
-    NetworkTask::mac = mac_address;
-    client = new PubSubClient();
-}
-
-void init_wifi(char * ssid, char* password){
-    delay(10);
-    Serial.println(String("Connecting to ") + ssid);
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
-
+NetworkTask::NetworkTask(char * ssid, char* password, char* mqtt_server){
+    NetworkTask::ssid = ssid;
+    NetworkTask::password = password;
+    NetworkTask::mqtt_server = mqtt_server;
 }
 
 void NetworkTask::init(int period){
     Task::init(period);
-    client->setServer(*address,59999);
+    attempt_connect();
+    client.setServer(mqtt_server, 1883);
 }
 
 void NetworkTask::tick(){
+    
+    
+}
 
+void NetworkTask::attempt_connect(){
+    delay(100);
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(NetworkTask::ssid, NetworkTask::password);
 }

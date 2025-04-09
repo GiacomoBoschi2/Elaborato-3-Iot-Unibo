@@ -11,14 +11,15 @@ class State(Enum):
     TOO_HOT = 3
 
 class ArduinoCommunicator:
-    def __init__(self,arduino:serial.Serial):
-        self.arduino = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=.1) 
+    def __init__(self):
         self.manual_mode = False
         self.current_rotation = 0
         self.command = b""
         self.system_state = State.NORMAL
         self.t1 = 10
         self.t2 = 20
+        self.f1 = 1
+        self.f2 = 0.5
     
     def update_state(self,temperature):
         if temperature< self.t1 :
@@ -35,8 +36,13 @@ class ArduinoCommunicator:
             return 0.01 + ((temperature-self.t1)/(self.t2-self.t1))*0.99
         return 1
     
-    def send_rotation(self):
-        self.arduino.write(str(self.current_rotation*100).encode())
+    def get_frequency(self):
+        if (self.get_state()==State.NORMAL):
+            return self.f1
+        return self.f2
+    
+    def get_state(self):
+        return self.system_state
     
 
 
