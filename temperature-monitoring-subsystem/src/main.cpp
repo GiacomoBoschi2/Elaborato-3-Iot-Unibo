@@ -7,6 +7,7 @@
 #include "../lib/Tasks/NetworkTask.h"
 
 
+
 #define RED_PIN 27
 #define GREEN_PIN 26
 #define TEMP_PIN 34
@@ -18,8 +19,6 @@ Scheduler* sched;
 LedTask* ledTask;
 TempSensorTask* tempTask;
 NetworkTask* network_task;
-IPAddress* address = new IPAddress(127,0,0,1);
-byte mac[] = MAC_ADDRESS;
 SharedData share_data;
 
 void setup() {
@@ -34,7 +33,7 @@ void setup() {
   tempTask->init(BASE_PERIOD*4);
   sched->addTask(tempTask);
 
-  network_task = new NetworkTask(address ,mac);
+  network_task = new NetworkTask("Tu WiFi l'americano 2.0","6NEUQRAU7F","192.168.1.57");
   network_task->init(BASE_PERIOD*3);
   sched->addTask(network_task);
 }
