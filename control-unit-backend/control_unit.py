@@ -7,6 +7,7 @@ mqtt_manager = subscriber_handler()
 #serial_listener = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=.1)
 
 def message_handling_temp(client, userdata, msg):
+    print("Obtained: "+msg.payload.decode())
     try:
         temp = float(msg.payload.decode())
         mqtt_manager.update_temperatures(temp)
@@ -20,8 +21,8 @@ def message_handling_temp(client, userdata, msg):
     
 
 def start_listening_for_temperature():
-    listener2 = paho.Client()
-    listener2.connect("localhost",1883,60)
+    listener2 = paho.Client(client_id="python-listener")
+    listener2.connect("192.168.1.75",1883,60)
     listener2.subscribe("temperature-topic")
     listener2.on_message = message_handling_temp
     listener2.loop_forever()
@@ -30,9 +31,7 @@ def start_listening_for_web_server():
     return None
 
 print("Inizializzazione mqtt...")
-t1 = threading.Thread(target=start_listening_for_temperature)
-t1.start()
-
+start_listening_for_temperature()
 print("Premi invio per spegnere")
 input()
 print("Chiusura thread...")
