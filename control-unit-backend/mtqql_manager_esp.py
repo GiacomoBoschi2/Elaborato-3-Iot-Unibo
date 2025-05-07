@@ -24,7 +24,8 @@ class subscriber_handler:
         return (min_t,max_t,avg)
 
     def updateFrequency(self,frequency):
-        self.frequency_publisher.publish("frequency-topic",f"freq:{str(frequency)}")
+        message = self.frequency_publisher.publish("frequency-topic",f"{str(frequency)}")
+        print(message.is_published())
 
     def getLastMeasurment(self):
         if len(self.measures)==0:

@@ -22,6 +22,5 @@ void TempSensorTask::tick(){
         saved_period = 0;
         double measure = sensor->getTemperature();
         share_data.temperature = measure;
-        Serial.println(measure);
     }
 }

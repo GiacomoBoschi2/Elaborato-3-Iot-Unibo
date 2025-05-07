@@ -16,8 +16,12 @@ class NetworkTask: public Task{
         char* ssid;
         char* password;
         char* mqtt_server;
-        WiFiClient espClient;
-        PubSubClient client;
+        int frequency = 0;
+        int tick_counter = 0;
+        WiFiClient espClientWriter;
+        WiFiClient espClientReader;
+        PubSubClient writer;
+        PubSubClient reader;
 
 };
 

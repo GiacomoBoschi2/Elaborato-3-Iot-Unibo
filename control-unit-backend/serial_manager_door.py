@@ -18,8 +18,8 @@ class ArduinoCommunicator:
         self.system_state = State.NORMAL
         self.t1 = float(10.0)
         self.t2 = float(20.0)
-        self.f1 = float(1.0)
-        self.f2 = float(0.5)
+        self.f1 = 3000 #milliseconds
+        self.f2 = 1500
     
     def update_state(self,temperature):
         if temperature< self.t1 :

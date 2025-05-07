@@ -3,8 +3,10 @@
 
 //Code retrieved from the iot course (2024-2025)
 class Task {
-  int myPeriod;
-  int timeElapsed;
+
+  protected:
+    int myPeriod;
+    int timeElapsed;
   
 public:
   virtual void init(int period){

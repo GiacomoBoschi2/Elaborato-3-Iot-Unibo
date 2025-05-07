@@ -2,10 +2,14 @@
 #include "../lib/Scheduling/SharedData.h"
 #define BUF_SIZE 16
 
+#define START_FREQUENCY 3000
+
 extern SharedData share_data;
+int updated_freq = START_FREQUENCY;
 
 void callback(char* topic, byte* payload, unsigned int length) {
-    Serial.println(String("Message arrived on [") + topic + "] len: " + length );
+    String msg((char*)payload, length);
+    updated_freq = (msg.toInt());
 }
 
 NetworkTask::NetworkTask(char * ssid, char* password, char* mqtt_server){
@@ -17,27 +21,49 @@ NetworkTask::NetworkTask(char * ssid, char* password, char* mqtt_server){
 void NetworkTask::init(int period){
     Task::init(period);
     attempt_connect();
+    NetworkTask::frequency = START_FREQUENCY;
 
-    client.setClient(espClient);  
-    client.setServer(mqtt_server, 1883);
-    client.setCallback(callback);
+    //setup writer
+    writer.setClient(espClientWriter);  
+    writer.setServer(mqtt_server, 1883);
+
+    //setup reader
+    reader.setClient(espClientReader);  
+    reader.setServer(mqtt_server, 1883);
+    reader.setCallback(callback);
 }
 
 void NetworkTask::tick(){
-    share_data.server_ok = client.connected();
+    share_data.send_data = writer.connected();
     share_data.network_ok = (WiFi.status() == WL_CONNECTED);
+    share_data.receive_data = reader.connected();
 
-    if(share_data.server_ok){
-        client.subscribe("temperature-topic");
-        char msg[BUF_SIZE];
-        snprintf(msg, BUFSIZ+1, "%.2f", share_data.temperature);
-        client.publish("temperature-topic", msg); 
+    //send temperature if enough ticks have passed
+    NetworkTask::tick_counter+=Task::myPeriod;
+
+    int to_send= tick_counter>=NetworkTask::frequency;
+    if(to_send){
+        tick_counter = 0;
+        if(share_data.send_data && share_data.network_ok){
+            writer.subscribe("temperature-topic");
+            char msg[BUF_SIZE];
+            snprintf(msg, BUFSIZ+1, "%.2f", share_data.temperature);
+            writer.publish("temperature-topic", msg); 
+        }
+        else{
+            String clientId = String("esiot-2043-client-")+String(random(0xffff), HEX);
+            writer.connect(clientId.c_str());
+        }
     }
-    else{
-        Serial.println(client.state());  // Prints the error code
+    //check if frequency reader is connected
+    if(!share_data.receive_data){
         String clientId = String("esiot-2043-client-")+String(random(0xffff), HEX);
-        client.connect(clientId.c_str());
+        reader.connect(clientId.c_str());
     }
+
+    reader.subscribe("frequency-topic");
+    reader.loop();
+    frequency = updated_freq;
 }
 
 void NetworkTask::attempt_connect(){
@@ -46,12 +72,6 @@ void NetworkTask::attempt_connect(){
     int i = 0;
     while (WiFi.status() != WL_CONNECTED && i<25) {
         delay(500);
-        Serial.print(".");
         i+=1;
-    }
-
-    if(i<25){
-        Serial.println("Success");
-        Serial.println(WiFi.localIP());
     }
 }

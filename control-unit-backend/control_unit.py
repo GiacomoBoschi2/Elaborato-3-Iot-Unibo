@@ -12,7 +12,7 @@ def message_handling_temp(client, userdata, msg):
         temp = float(msg.payload.decode())
         mqtt_manager.update_temperatures(temp)
         new_rotation =  arduino.update_rotation(temperature=float(temp))
-        new_frequency = arduino.get_state()
+        new_frequency = arduino.get_frequency()
         mqtt_manager.updateFrequency(new_frequency)
         #serial_listener.write(str(new_rotation).encode())
     except Exception as e:
