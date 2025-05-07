@@ -16,10 +16,10 @@ class ArduinoCommunicator:
         self.current_rotation = 0
         self.command = b""
         self.system_state = State.NORMAL
-        self.t1 = 10
-        self.t2 = 20
-        self.f1 = 1
-        self.f2 = 0.5
+        self.t1 = float(10.0)
+        self.t2 = float(20.0)
+        self.f1 = float(1.0)
+        self.f2 = float(0.5)
     
     def update_state(self,temperature):
         if temperature< self.t1 :
@@ -28,8 +28,8 @@ class ArduinoCommunicator:
             return State.HOT
         return State.TOO_HOT
 
-    def update_rotation(self,temperature):
-        state = self.update_state()
+    def update_rotation(self,temperature:float):
+        state = self.update_state(temperature)
         if(state==State.NORMAL):
             return 0
         if state==State.HOT:

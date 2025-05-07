@@ -5,7 +5,7 @@ struct SharedData
 {
     long frequency = 1000;
     double temperature = 0;
-    int network_ok = 0;
+    int network_ok = 1;
     int server_ok = 1;
 };
 

@@ -4,7 +4,7 @@ import paho.mqtt.client as paho
 client = paho.Client()
 
 class subscriber_handler:
-    def __init__(self,server = "localhost",port = 1883, N=5):
+    def __init__(self,server = "broker.hivemq.com", port = 1883, N=5):
         self.server = server
         self.port = port
         self.frequency_publisher= paho.Client()

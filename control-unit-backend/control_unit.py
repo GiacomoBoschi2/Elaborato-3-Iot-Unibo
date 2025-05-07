@@ -11,18 +11,19 @@ def message_handling_temp(client, userdata, msg):
     try:
         temp = float(msg.payload.decode())
         mqtt_manager.update_temperatures(temp)
-        new_rotation =  arduino.update_rotation(temp)
+        new_rotation =  arduino.update_rotation(temperature=float(temp))
         new_frequency = arduino.get_state()
         mqtt_manager.updateFrequency(new_frequency)
         #serial_listener.write(str(new_rotation).encode())
-    except:
+    except Exception as e:
         print("Payload mal formattato da topic temperature")
+        print(e)
 
     
 
 def start_listening_for_temperature():
     listener2 = paho.Client(client_id="python-listener")
-    listener2.connect("192.168.1.75",1883,60)
+    listener2.connect("broker.hivemq.com",1883,60)
     listener2.subscribe("temperature-topic")
     listener2.on_message = message_handling_temp
     listener2.loop_forever()

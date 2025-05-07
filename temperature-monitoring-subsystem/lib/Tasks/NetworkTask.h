@@ -17,7 +17,7 @@ class NetworkTask: public Task{
         char* password;
         char* mqtt_server;
         WiFiClient espClient;
-        PubSubClient* client;
+        PubSubClient client;
 
 };
 
