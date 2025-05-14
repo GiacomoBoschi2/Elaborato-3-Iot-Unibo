@@ -10,10 +10,12 @@ void Lcd::init(){
     lcd.clear();
 }
 
-void Lcd::message(const char* msg){
-    lcd.backlight();
-    lcd.clear();
-    lcd.setCursor(0,0);
+void Lcd::message(const char* msg,int line = 0,int clear = 0){
+    if(clear){
+        lcd.backlight();
+        lcd.clear();
+    }
+    lcd.setCursor(0,line);
     lcd.print(msg);
 }
 

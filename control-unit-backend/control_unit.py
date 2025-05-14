@@ -1,9 +1,11 @@
 from serial_manager_door import *
 from mtqql_manager_esp import *
 import threading
+import serial 
 
 arduino = ArduinoCommunicator()
 mqtt_manager = subscriber_handler()
+serialConnection = serial.Serial('/dev/ttyACM0')
 #serial_listener = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=.1)
 
 def message_handling_temp(client, userdata, msg):
@@ -14,6 +16,8 @@ def message_handling_temp(client, userdata, msg):
         new_rotation =  arduino.update_rotation(temperature=float(temp))
         new_frequency = arduino.get_frequency()
         mqtt_manager.updateFrequency(new_frequency)
+        arduino.update_rotation(temp)
+        communicate_new_rotation()
         #serial_listener.write(str(new_rotation).encode())
     except Exception as e:
         print("Payload mal formattato da topic temperature")
@@ -26,13 +30,26 @@ def start_listening_for_temperature():
     listener2.connect("broker.hivemq.com",1883,60)
     listener2.subscribe("temperature-topic")
     listener2.on_message = message_handling_temp
-    listener2.loop_forever()
+    listener2.loop_start()
+    
+def communicate_new_rotation():
+    serialConnection.write(str(arduino.converted_rotation()).encode())
+
 
 def start_listening_for_web_server():
     return None
 
 print("Inizializzazione mqtt...")
-start_listening_for_temperature()
+# Create a thread targeting the function
+temperature_thread = threading.Thread(target=start_listening_for_temperature)
+
+# Start the thread
+print("Inizializza lettura temperatura")
+temperature_thread.start()
+print("Inizializza comunicazione seriale")
+print("Inizializza Socket web")
+
+#Done
 print("Premi invio per spegnere")
 input()
 print("Chiusura thread...")

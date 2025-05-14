@@ -20,9 +20,11 @@ void DoorTask::tick(){
     long door_rot = 0;
 
     if(status==READ_FROM_SYSTEM){
-        door_rot=150;
+        share_data.manual_mode_on = 0;
+        door_rot=70;
     }
     else if(status==READ_FROM_POT){
+        share_data.manual_mode_on = 1;
         door_rot=pot->read();
     }
     else{

@@ -28,6 +28,7 @@ void initalizeSharedData(){
   share_data.door_rotation = 0;
   share_data.manual_mode_on = 0;
   share_data.switch_mode = 0;
+  share_data.current_temp = 0.0;
 }
 
 void setup() {
@@ -41,7 +42,7 @@ void setup() {
   buttonTask = new ButtonTask(BUTTON_PIN);
   buttonTask->init(BASE_PERIOD*3);
   lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
-  lcdTask->init(BASE_PERIOD*5);
+  lcdTask->init(BASE_PERIOD*8);
   serialTask = new SerialTask();
   serialTask->init(BASE_PERIOD*5);
 

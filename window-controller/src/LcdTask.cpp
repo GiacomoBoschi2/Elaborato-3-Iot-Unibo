@@ -15,10 +15,20 @@ void LcdTask::init(int period){
 }
 
 void LcdTask::tick(){
-    char msg[64];
-    sprintf(msg, "Current rotation (in degrees): %d", share_data.door_rotation);
-    updateMsg(msg);
-    lcd->message(currentMsg);
+    char msg[32];
+    sprintf(msg, "Current rotation: %d", share_data.door_rotation);
+    lcd->message(msg,0,1);
+    if(share_data.manual_mode_on){
+        sprintf(msg, "Manual Mode\0");
+        lcd->message(msg,1,0);
+        sprintf(msg, "Temperature:%d \0",share_data.current_temp);
+        lcd->message(msg,2,0);
+    }
+    else{
+        sprintf(msg, "Automatic Mode\0");
+        lcd->message(msg,1,0);
+    }
+   
 }
 
 void LcdTask::updateMsg(const char* msg){

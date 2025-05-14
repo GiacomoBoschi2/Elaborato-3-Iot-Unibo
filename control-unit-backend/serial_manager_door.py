@@ -1,5 +1,4 @@
 # Importing Libraries 
-import serial 
 import time 
 import random
 from enum import Enum
@@ -16,24 +15,26 @@ class ArduinoCommunicator:
         self.current_rotation = 0
         self.command = b""
         self.system_state = State.NORMAL
-        self.t1 = float(10.0)
-        self.t2 = float(20.0)
+        self.t1 = float(7.0)
+        self.t2 = float(14.0)
         self.f1 = 3000 #milliseconds
         self.f2 = 1500
     
     def update_state(self,temperature):
         if temperature< self.t1 :
             return State.NORMAL
+           
         if temperature <= self.t2:
             return State.HOT
         return State.TOO_HOT
 
     def update_rotation(self,temperature:float):
-        state = self.update_state(temperature)
-        if(state==State.NORMAL):
+        self.system_state = self.update_state(temperature)
+        print("state=" + str(self.get_state()))
+        if(self.system_state==State.NORMAL):
             return 0
-        if state==State.HOT:
-            return 0.01 + ((temperature-self.t1)/(self.t2-self.t1))*0.99
+        if self.system_state==State.HOT:
+            new_rot =  0.01 + ((temperature-self.t1)/(self.t2-self.t1))*0.99
         return 1
     
     def get_frequency(self):
@@ -43,6 +44,9 @@ class ArduinoCommunicator:
     
     def get_state(self):
         return self.system_state
+    
+    def converted_rotation(self):
+        return round(0.90 * self.current_rotation*100,2)
     
 
 

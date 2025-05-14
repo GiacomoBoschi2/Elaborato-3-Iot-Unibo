@@ -14,7 +14,7 @@ void SerialTask::init(int period){
 }
 
 void SerialTask::tick(){
-    //read possible commands from java GUI
+    //read possible commands from Python API
     int success = handler->tryRead(buffer);
     if(success){
         String read_bytes = buffer;
