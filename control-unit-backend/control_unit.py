@@ -1,12 +1,19 @@
+import asyncio
 from serial_manager_door import *
 from mtqql_manager_esp import *
 import threading
 import serial 
+import asyncio
+from aiohttp import web
+import aiohttp_jinja2
 
 arduino = ArduinoCommunicator()
 mqtt_manager = subscriber_handler()
 serialConnection = serial.Serial('/dev/ttyACM1')
-#serial_listener = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=.1)
+
+async def hello(request):
+    return web.Response(text="Hello, world")
+
 
 def message_handling_temp(client, userdata, msg):
     print("Obtained: "+msg.payload.decode())
@@ -50,6 +57,11 @@ print("Inizializza lettura temperatura")
 temperature_thread.start()
 print("Inizializza comunicazione seriale")
 print("Inizializza Socket web")
+
+app = web.Application()
+app.add_routes([web.get('/', hello)])
+web.run_app(app)
+
 
 #Done
 print("Premi invio per spegnere")

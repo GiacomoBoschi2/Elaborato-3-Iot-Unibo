@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <script  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .data-section p {
+            font-size: 1.1rem;
+            margin: 12px 0;
+            color: #333;
+        }
+
+        .button-section {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #30912d;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button#manual:hover {
+            background-color: #82ff7d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="data-section">
+            <p><strong>Current Mode:</strong></p>
+            <p><strong>Last measurement:</strong></p>
+            <p><strong>Biggest temperature reached:</strong></p>
+            <p><strong>Lowest temperature reached:</strong></p>
+            <p><strong>Current Average:</strong></p>
+            <p><strong>Opening of window:</strong></p>
+        </div>
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+            <button id="manual">Manual mode off</button>
+            <button disabled>Resolve Alarm</button>
+
+    </div>
+</body>
+</html>
+
+<script>
+let myChart;
+
+function fetchDataAndUpdateChart() {
+  fetch("./data.txt")  // Replace with your actual path to the .txt file
+    .then(response => response.text())
+    .then(text => {
+      const yValues = text.trim().split("\n").map(Number);
+      const xValues = yValues.map((_, i) => i + 1);
+
+      if (myChart) {
+        // Update existing chart
+        myChart.data.labels = xValues;
+        myChart.data.datasets[0].data = yValues;
+        myChart.update();
+      } else {
+        // Create chart first time
+        myChart = new Chart("myChart", {
+          type: "line",
+          data: {
+            labels: xValues,
+            datasets: [{
+              fill: false,
+              lineTension: 0,
+              backgroundColor: "rgba(0,0,255,1.0)",
+              borderColor: "rgba(0,0,255,0.1)",
+              data: yValues
+            }]
+          },
+          options: {
+            legend: { display: false },
+            scales: {
+              y: {
+                min: 6,
+                max: 16
+              }
+            }
+          }
+        });
+      }
+    })
+    .catch(err => console.error("Error fetching data:", err));
+}
+
+// Initial load
+fetchDataAndUpdateChart();
+
+// Refresh every 5 seconds
+setInterval(fetchDataAndUpdateChart, 5000);
+</script> 
