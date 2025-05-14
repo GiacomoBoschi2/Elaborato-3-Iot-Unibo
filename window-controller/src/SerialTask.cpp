@@ -18,7 +18,22 @@ void SerialTask::tick(){
     int success = handler->tryRead(buffer);
     if(success){
         String read_bytes = buffer;
-        share_data.auto_mode_rotation = read_bytes.toInt();
-        handler->tryWriteLine(share_data.auto_mode_rotation);
+        char delimiter [] = "|";
+        char * data = strtok(buffer,delimiter);
+        
+        //update data 
+        if(data!=NULL){
+            handler->tryWriteLine(data);
+            share_data.auto_mode_rotation = String(data).toInt();
+            data = strtok(nullptr,delimiter);
+            if(data!=NULL){
+                handler->tryWriteLine(data);
+                handler->tryWriteLine(buffer);
+                double s = String(data).toDouble(); 
+                share_data.current_temp = s;
+                Serial.println(s);
+            }
+        }
+        
     }
 }

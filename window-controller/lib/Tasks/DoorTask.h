@@ -17,6 +17,7 @@ private:
   Potentiometer* pot;
   enum State {READ_FROM_SYSTEM,READ_FROM_POT,NOT_READING} status;
   int updateStatus();
+  int prev_door_rot = 0;
 };
 
 #endif

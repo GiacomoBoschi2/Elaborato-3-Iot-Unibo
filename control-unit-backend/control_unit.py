@@ -5,7 +5,7 @@ import serial
 
 arduino = ArduinoCommunicator()
 mqtt_manager = subscriber_handler()
-serialConnection = serial.Serial('/dev/ttyACM0')
+serialConnection = serial.Serial('/dev/ttyACM1')
 #serial_listener = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=.1)
 
 def message_handling_temp(client, userdata, msg):
@@ -17,7 +17,7 @@ def message_handling_temp(client, userdata, msg):
         new_frequency = arduino.get_frequency()
         mqtt_manager.updateFrequency(new_frequency)
         arduino.update_rotation(temp)
-        communicate_new_rotation()
+        communicate_new_data()
         #serial_listener.write(str(new_rotation).encode())
     except Exception as e:
         print("Payload mal formattato da topic temperature")
@@ -32,8 +32,10 @@ def start_listening_for_temperature():
     listener2.on_message = message_handling_temp
     listener2.loop_start()
     
-def communicate_new_rotation():
-    serialConnection.write(str(arduino.converted_rotation()).encode())
+def communicate_new_data():
+    paylaod = str(arduino.converted_rotation()).encode()+b'|'+str(mqtt_manager.measures[-1]).encode()
+    print(paylaod)
+    serialConnection.write(paylaod) #last temperature measured
 
 
 def start_listening_for_web_server():

@@ -21,7 +21,7 @@ void LcdTask::tick(){
     if(share_data.manual_mode_on){
         sprintf(msg, "Manual Mode\0");
         lcd->message(msg,1,0);
-        sprintf(msg, "Temperature:%d \0",share_data.current_temp);
+        sprintf(msg, "Temperature:%s",String(share_data.current_temp).c_str());
         lcd->message(msg,2,0);
     }
     else{

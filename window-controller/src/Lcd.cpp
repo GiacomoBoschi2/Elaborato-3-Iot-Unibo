@@ -1,5 +1,6 @@
 #include "../Components/Lcd.h"
 
+
 Lcd::Lcd(int address, int cols, int rows):lcd(address,cols,rows){
 
 }

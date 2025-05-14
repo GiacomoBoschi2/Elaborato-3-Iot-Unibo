@@ -17,11 +17,11 @@ void DoorTask::init(int period){
 void DoorTask::tick(){
 
     status = updateStatus();
-    long door_rot = 0;
+    long door_rot = prev_door_rot;
 
     if(status==READ_FROM_SYSTEM){
         share_data.manual_mode_on = 0;
-        door_rot=70;
+        door_rot=share_data.auto_mode_rotation;
     }
     else if(status==READ_FROM_POT){
         share_data.manual_mode_on = 1;
@@ -30,8 +30,14 @@ void DoorTask::tick(){
     else{
         door_rot=90;
     }
-     door->setAngle(door_rot);
-     share_data.door_rotation = door_rot;
+
+    //invoke door device only if necessary
+    if(door_rot!=prev_door_rot){
+        door->setAngle(door_rot);
+        share_data.door_rotation = door_rot;
+        prev_door_rot = door_rot;
+    }
+
 }
 
 int DoorTask::updateStatus(){
