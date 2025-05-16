@@ -16,6 +16,7 @@ void SerialTask::init(int period){
 void SerialTask::tick(){
     //read possible commands from Python API
     int success = handler->tryRead(buffer);
+    Serial.println(success);
     if(success){
         String read_bytes = buffer;
         char delimiter [] = "|";
@@ -23,15 +24,11 @@ void SerialTask::tick(){
         
         //update data 
         if(data!=NULL){
-            handler->tryWriteLine(data);
             share_data.auto_mode_rotation = String(data).toInt();
             data = strtok(nullptr,delimiter);
             if(data!=NULL){
-                handler->tryWriteLine(data);
-                handler->tryWriteLine(buffer);
                 double s = String(data).toDouble(); 
                 share_data.current_temp = s;
-                Serial.println(s);
             }
         }
         

@@ -7,7 +7,7 @@
 #include "../lib/Tasks/SerialTask.h"
 
 
-#define BASE_PERIOD 50
+#define BASE_PERIOD 100
 
 #define DOOR_PIN 9
 #define BUTTON_PIN 2
@@ -38,11 +38,11 @@ void setup() {
 
   //create tasks
   doorTask = new DoorTask(DOOR_PIN,POTENTIOMETER_PIN);
-  doorTask->init(BASE_PERIOD*2);
+  doorTask->init(BASE_PERIOD*5);
   buttonTask = new ButtonTask(BUTTON_PIN);
-  buttonTask->init(BASE_PERIOD*3);
+  buttonTask->init(BASE_PERIOD*2);
   lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
-  lcdTask->init(BASE_PERIOD*8);
+  lcdTask->init(BASE_PERIOD*5);
   serialTask = new SerialTask();
   serialTask->init(BASE_PERIOD*5);
 

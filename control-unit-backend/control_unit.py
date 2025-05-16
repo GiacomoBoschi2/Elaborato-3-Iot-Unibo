@@ -5,11 +5,11 @@ import threading
 import serial 
 import asyncio
 from aiohttp import web
-import aiohttp_jinja2
+
 
 arduino = ArduinoCommunicator()
 mqtt_manager = subscriber_handler()
-serialConnection = serial.Serial('/dev/ttyACM1')
+serialConnection = serial.Serial('/dev/ttyACM0')
 
 async def hello(request):
     return web.Response(text="Hello, world")
