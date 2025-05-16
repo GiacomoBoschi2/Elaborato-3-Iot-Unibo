@@ -14,5 +14,6 @@ class ButtonTask: public Task{
         Button* button_handler;
         int ticks_elapsed;
         enum {PRESSED,NOT_PRESSED} status;
+        int prev_status;
 };
 #endif

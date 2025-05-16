@@ -11,6 +11,7 @@ ButtonTask::ButtonTask(int pin){
 void ButtonTask::init(int period){
     Task::init(period);
     status = NOT_PRESSED;
+    prev_status = status;
 }
 
 void ButtonTask::tick(){

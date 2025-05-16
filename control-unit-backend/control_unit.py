@@ -6,7 +6,8 @@ import threading
 import serial 
 import asyncio
 from aiohttp import web
-import paho.mqtt.client as mqtt
+from paho import mqtt
+
 
 arduino = ArduinoCommunicator()
 mqtt_manager = subscriber_handler()
@@ -15,12 +16,6 @@ serialConnection = serial.Serial('/dev/ttyACM1')
 async def hello(request):
     return web.Response(text="Hello, world")
 
-
-def on_disconnect(client, userdata, rc):
-    if rc != 0:
-        print(f"[MQTT] Unexpected disconnection. Return code: {rc}")
-    else:
-        print("[MQTT] Disconnected cleanly.")
 
 def message_handling_temp(client, userdata, msg):
     print("Obtained: "+msg.payload.decode())
@@ -39,14 +34,13 @@ def message_handling_temp(client, userdata, msg):
 
     
 
+
 def start_listening_for_temperature():
-    client = mqtt.Client(client_id=f"python-listener-{uuid.uuid4()}")
-    print("connecting")
+    client = paho.Client(client_id=f"python-listener-{uuid.uuid4()}")
     client.connect("broker.hivemq.com",1883,60)
     client.subscribe("temperature-topic")
     client.on_message = message_handling_temp
-    client.on_disconnect = on_disconnect
-    client.loop_forever()
+    client.loop_start()
     
 def communicate_new_data():
     paylaod = str(arduino.converted_rotation()).encode()+b'|'+str(mqtt_manager.measures[-1]).encode()
@@ -59,4 +53,18 @@ def start_listening_for_web_server():
 
 print("Inizializzazione mqtt...")
 # Create a thread targeting the function
-start_listening_for_temperature()
+temperature_thread = threading.Thread(target=start_listening_for_temperature)
+
+# Start the thread
+print("Inizializza lettura temperatura")
+temperature_thread.start()
+print("Inizializza comunicazione seriale")
+print("Inizializza Socket web")
+
+
+
+#Done
+print("Premi invio per spegnere")
+input()
+print("Chiusura thread...")
+

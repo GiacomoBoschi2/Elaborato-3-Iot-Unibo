@@ -2,6 +2,8 @@
 #include "../lib/Scheduling/SharedData.h"
 #include <Arduino.h>
 
+
+
 extern struct SharedData share_data;
 
 DoorTask::DoorTask(int doorPin,int potPin){
@@ -11,20 +13,16 @@ DoorTask::DoorTask(int doorPin,int potPin){
 
 void DoorTask::init(int period){
     Task::init(period);
-    status = READ_FROM_SYSTEM;
 }
 
 void DoorTask::tick(){
 
-    status = updateStatus();
     long door_rot = prev_door_rot;
 
-    if(status==READ_FROM_SYSTEM){
-        share_data.manual_mode_on = 0;
+    if(share_data.current_mode==AUTO_MODE){
         door_rot=share_data.auto_mode_rotation;
     }
-    else if(status==READ_FROM_POT){
-        share_data.manual_mode_on = 1;
+    else if(share_data.current_mode==MANUAL_MODE){
         door_rot=pot->read();
     }
     else{
@@ -40,13 +38,3 @@ void DoorTask::tick(){
 
 }
 
-int DoorTask::updateStatus(){
-    if(status!=NOT_READING){
-        if(share_data.switch_mode){
-            share_data.switch_mode = 0;
-            return (status==READ_FROM_SYSTEM) ? READ_FROM_POT : READ_FROM_SYSTEM;
-        }
-        return status;
-    }
-    return NOT_READING;
-}
