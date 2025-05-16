@@ -38,13 +38,13 @@ void setup() {
 
   //create tasks
   doorTask = new DoorTask(DOOR_PIN,POTENTIOMETER_PIN);
-  doorTask->init(BASE_PERIOD*5);
+  doorTask->init(BASE_PERIOD*10);
   buttonTask = new ButtonTask(BUTTON_PIN);
-  buttonTask->init(BASE_PERIOD*2);
+  buttonTask->init(BASE_PERIOD);
   lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
-  lcdTask->init(BASE_PERIOD*5);
+  lcdTask->init(BASE_PERIOD*8);
   serialTask = new SerialTask();
-  serialTask->init(BASE_PERIOD*5);
+  serialTask->init(BASE_PERIOD*10);
 
   //add tasks
   sched->addTask(doorTask);

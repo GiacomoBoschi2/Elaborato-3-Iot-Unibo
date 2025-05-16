@@ -1,5 +1,6 @@
 #include "../lib/Tasks/NetworkTask.h"
 #include "../lib/Scheduling/SharedData.h"
+#include "lwip/dns.h" 
 #define BUF_SIZE 16
 
 #define START_FREQUENCY 3000
@@ -38,6 +39,8 @@ void NetworkTask::tick(){
     share_data.network_ok = (WiFi.status() == WL_CONNECTED);
     share_data.receive_data = reader.connected();
 
+
+
     //send temperature if enough ticks have passed
     NetworkTask::tick_counter+=Task::myPeriod;
 
@@ -45,9 +48,9 @@ void NetworkTask::tick(){
     if(to_send){
         tick_counter = 0;
         if(share_data.send_data && share_data.network_ok){
-            writer.subscribe("temperature-topic");
             char msg[BUF_SIZE];
             snprintf(msg, BUFSIZ+1, "%.2f", share_data.temperature);
+            Serial.println(msg);
             writer.publish("temperature-topic", msg); 
         }
         else{
@@ -74,4 +77,12 @@ void NetworkTask::attempt_connect(){
         delay(500);
         i+=1;
     }
+
+    ip_addr_t dns1, dns2;
+    IP_ADDR4(&dns1, 8, 8, 8, 8);
+    IP_ADDR4(&dns2, 8, 8, 4, 4);
+  
+    dns_setserver(0, &dns1);  // Primary DNS
+    dns_setserver(1, &dns2);  // Secondary DNS
 }
+

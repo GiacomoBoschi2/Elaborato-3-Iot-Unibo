@@ -2,7 +2,7 @@
 #include "../lib/Scheduling/SharedData.h"
 
 extern struct SharedData share_data;
-#define MAX_BUFFER_SIZE 64
+#define MAX_BUFFER_SIZE 32
 
 SerialTask::SerialTask(){
     handler = new SerialHandler();
@@ -24,10 +24,10 @@ void SerialTask::tick(){
         
         //update data 
         if(data!=NULL){
-            share_data.auto_mode_rotation = String(data).toInt();
+            share_data.auto_mode_rotation = atoi(data);
             data = strtok(nullptr,delimiter);
             if(data!=NULL){
-                double s = String(data).toDouble(); 
+                double s = atof(data);
                 share_data.current_temp = s;
             }
         }
