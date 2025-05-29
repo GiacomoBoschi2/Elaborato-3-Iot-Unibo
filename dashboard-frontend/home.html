@@ -38,31 +38,32 @@
             font-size: 1rem;
             border: none;
             border-radius: 8px;
-            background-color: #30912d;
+            background-color: #fcb621;
             color: white;
             cursor: pointer;
             transition: background-color 0.2s;
+            
         }
 
-        button#manual:hover {
-            background-color: #82ff7d;
+        button:hover {
+          background-color: #b87f06;
         }
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="data-section">
-            <p><strong>Current Mode:</strong></p>
-            <p><strong>Last measurement:</strong></p>
-            <p><strong>Biggest temperature reached:</strong></p>
-            <p><strong>Lowest temperature reached:</strong></p>
-            <p><strong>Current Average:</strong></p>
-            <p><strong>Opening of window:</strong></p>
+            <p id="mode"><strong>Current Mode:</strong></p>
+            <p id="last"><strong>Last measurement:</strong></p>
+            <p id="lowest"><strong>Biggest temperature reached:</strong></p>
+            <p id="highest"><strong>Lowest temperature reached:</strong></p>
+            <p id="avg"><strong>Current Average:</strong></p>
+            <p id="door"><strong>Current Average:</strong></p>
         </div>
         <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-
-            <button id="manual">Manual mode off</button>
-            <button disabled>Resolve Alarm</button>
+            <button id="manual">Activate Manual Mode</button>
+            <button id="alarm" disabled>Resolve Alarm</button>
 
     </div>
 </body>
@@ -82,6 +83,8 @@ function fetchDataAndUpdateChart() {
         // Update existing chart
         myChart.data.labels = xValues;
         myChart.data.datasets[0].data = yValues;
+        myChart.options.scales.y.min = -10;
+        myChart.options.scales.y.max = 20;
         myChart.update();
       } else {
         // Create chart first time
@@ -101,8 +104,8 @@ function fetchDataAndUpdateChart() {
             legend: { display: false },
             scales: {
               y: {
-                min: 6,
-                max: 16
+                min: -10,
+                max: 20
               }
             }
           }
@@ -112,9 +115,36 @@ function fetchDataAndUpdateChart() {
     .catch(err => console.error("Error fetching data:", err));
 }
 
+
+function fetchJsonAndUpdateInfo() {
+  fetch("./info.json")  // Replace with your actual path to the .txt file
+    .then(response => response.text())
+    .then(info => {
+      data = JSON.parse(info);
+      document.getElementById('avg').textContent = "Avarage:"+data["avg"];
+      document.getElementById('last').textContent = "Last measurement:"+data.last_m;
+      document.getElementById('mode').textContent = "Current system mode:"+data.mode;
+      document.getElementById('lowest').textContent = "Current minimal temperature:"+data["min"];
+      document.getElementById('highest').textContent = "Current maximal temperature:"+data["max"];
+      document.getElementById('door').textContent = "Current door opening:"+data["door"];
+    })
+    .catch(err => console.error("Error fetching data:", err));
+}
+
+document.getElementById("manual").addEventListener("click", async () => {
+    try {
+        const response = await fetch("./manual");
+        const data = await response.text(); 
+    } catch (error) {
+        console.error("Fetch error:", error);
+    }
+});
+
 // Initial load
 fetchDataAndUpdateChart();
+fetchJsonAndUpdateInfo();
 
 // Refresh every 5 seconds
-setInterval(fetchDataAndUpdateChart, 2500);
+setInterval(fetchDataAndUpdateChart, 1500);
+setInterval(fetchJsonAndUpdateInfo, 1500);
 </script> 

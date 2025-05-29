@@ -17,6 +17,15 @@ int SerialHandler::tryRead(char* reader){
     return 0;
 }
 
+int SerialHandler::tryReadline(char* reader){
+    if(Serial.available()>0){
+        int read_len = Serial.readBytesUntil('\n',reader,MAX_BUFFER_SIZE);
+        reader[min(read_len,63)] = 0;
+        return read_len>0;
+    }
+    return 0;
+}
+
 int SerialHandler::tryWrite(char* message){
     Serial.print(message);
     return 1;
@@ -28,7 +37,7 @@ int SerialHandler::tryWrite(double message){
 }
 
 int SerialHandler::tryWrite(int message){
-    Serial.print(message);
+    Serial.println(message);
     return 1;
 }
 

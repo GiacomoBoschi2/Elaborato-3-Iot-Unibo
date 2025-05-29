@@ -24,6 +24,7 @@ void DoorTask::tick(){
     }
     else if(share_data.current_mode==MANUAL_MODE){
         door_rot=pot->read();
+        share_data.auto_mode_rotation = door_rot;
     }
     else{
         door_rot=90;

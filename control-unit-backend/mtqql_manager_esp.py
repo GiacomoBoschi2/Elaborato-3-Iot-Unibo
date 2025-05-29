@@ -11,11 +11,15 @@ class subscriber_handler:
         self.frequency_publisher.connect(server,port,60)
         self.N = N #numero campioni da tenere traccia
         self.measures = []
+        self.current_max=0.0
+        self.current_min=9999.0
     
     def update_temperatures(self,temperature):
         if(len(self.measures)==self.N):
             self.measures = self.measures[1:]
         self.measures.append(temperature)
+        self.current_max = max(self.current_max,temperature)
+        self.current_min = min(self.current_min,temperature)
 
     def get_info_measurements(self): #returns a tuple (min,max,avg)
         min_t = min(self.measures)
@@ -31,6 +35,11 @@ class subscriber_handler:
         if len(self.measures)==0:
             return 0
         return self.measures[-1]
+    
+    def avarage(self):
+        if len(self.measures)==0:
+            return 0
+        return sum(self.measures)/len(self.measures)
 
 
     

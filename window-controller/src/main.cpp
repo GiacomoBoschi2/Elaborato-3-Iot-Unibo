@@ -4,7 +4,8 @@
 #include "../lib/Tasks/ButtonTask.h"
 #include "../lib/Tasks/LcdTask.h"
 #include "../lib/Scheduling/SharedData.h"
-#include "../lib/Tasks/SerialTask.h"
+#include "../lib/Tasks/SerialReaderTask.h"
+#include "../lib/Tasks/SerialWriterTask.h"
 #include "../lib/Tasks/ModeTask.h"
 
 
@@ -22,7 +23,8 @@ Scheduler* sched;
 DoorTask* doorTask;
 ButtonTask* buttonTask;
 LcdTask* lcdTask;
-SerialTask* serialTask;
+SerialReaderTask* serialTask;
+SerialWriterTask* serialTaskWriter;
 ModeTask* modeTask;
 SharedData share_data;
 
@@ -47,8 +49,11 @@ void setup() {
   lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
   lcdTask->init(BASE_PERIOD*4);
 
-  serialTask = new SerialTask();
+  serialTask = new SerialReaderTask();
   serialTask->init(BASE_PERIOD*4);
+
+  serialTaskWriter = new SerialWriterTask();
+  serialTaskWriter->init(BASE_PERIOD*6);
   
   modeTask = new ModeTask();
   modeTask->init(BASE_PERIOD*2);
@@ -59,6 +64,7 @@ void setup() {
   sched->addTask(lcdTask);
   sched->addTask(serialTask);
   sched->addTask(modeTask);
+  sched->addTask(serialTaskWriter);
 }
 
 void loop() {

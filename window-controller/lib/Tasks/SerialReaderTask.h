@@ -4,9 +4,9 @@
 #include "SerialHandler.h"
 #include "Task.h"
 
-class SerialTask: public Task{
+class SerialReaderTask: public Task{
     public:
-        SerialTask();
+        SerialReaderTask();
         void init(int period);
         void tick();
     private:
