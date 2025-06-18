@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 {"mode": "State.HOT", "last_m": 9.79, "avg": 9.956, "max": 12.29, "min": 6.17, "door": "31\r\n"}
 =======
 {"mode": "State.TOO_HOT", "last_m": 13.66, "avg": 12.874, "max": 21.0, "min": 10.04, "door": "44\r\n"}
 >>>>>>> 93f60fc (Separated Task logic into Mqtt and Network connection)
+=======
+{"mode": "State.PANIC", "last_m": 15.92, "avg": 15.709999999999999, "max": 17.61, "min": 14.39, "door": "90\r\n"}
+>>>>>>> 421c69f (added implementation for panic mode)

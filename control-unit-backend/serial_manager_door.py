@@ -1,14 +1,33 @@
-import time 
+import time
 import random
 from enum import Enum
+import threading
 
 
 class State(Enum):
     NORMAL = 1
     HOT = 2
     TOO_HOT = 3
+    PANIC = 4
 
 class ArduinoCommunicator:
+
+    def runTimer(self):
+        start = time.time()
+        while True:
+            if self.startTimer:
+                start = time.time()
+                self.startTimer = False
+            elif self.running:
+                time_passed = time.time()-start
+                print(time_passed)
+                if time_passed > 5:
+                    self.setPanic = True
+                    self.running = False
+                    self.startTimer = False
+            time.sleep(0.1)
+
+
     def __init__(self):
         self.manual_mode = False
         self.current_rotation = 0
@@ -18,8 +37,21 @@ class ArduinoCommunicator:
         self.t2 = float(10.0)
         self.f1 = 3000 #milliseconds
         self.f2 = 1500
+        self.startTimer = False
+        self.running = False
+        self.setPanic = False
+        timer_thread = threading.Thread(target=self.runTimer,daemon=True)
+        timer_thread.start()
     
     def update_state(self,temperature):
+        if self.system_state == State.PANIC:
+            return self.system_state
+        
+        if self.setPanic:
+            self.setPanic = False
+            print("Panic mode hit")
+            return State.PANIC
+        
         if temperature< self.t1 :
             return State.NORMAL
            
@@ -28,8 +60,15 @@ class ArduinoCommunicator:
         return State.TOO_HOT
 
     def update_rotation(self,temperature:float):
+        prev_state = self.get_state()
         self.system_state = self.update_state(temperature)
-        print("state=" + str(self.get_state()))
+        if self.system_state == State.TOO_HOT and prev_state!=State.TOO_HOT:
+            self.startTimer = True
+            self.running = True
+        
+        if self.system_state!=State.TOO_HOT and self.system_state!=State.PANIC:
+            self.running = False
+
         if(self.system_state==State.NORMAL):
             self.current_rotation = 0.0
         elif self.system_state==State.HOT:
@@ -47,7 +86,6 @@ class ArduinoCommunicator:
         return self.system_state
     
     def converted_rotation(self):
-        print("Rotation = "+str(self.current_rotation))
         return round(0.90 * self.current_rotation*100.0,2)
     
 
