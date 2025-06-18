@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 9.23
 10.44
 9.88
 10.44
 9.79
+=======
+13.26
+12.78
+14.07
+10.6
+13.66
+>>>>>>> 93f60fc (Separated Task logic into Mqtt and Network connection)
