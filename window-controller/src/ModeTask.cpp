@@ -15,9 +15,13 @@ void ModeTask::init(int period){
 
 void ModeTask::tick(){
 
-    if(share_data.current_mode == SYSTEM_PANIC){
-        return;
+    if(share_data.switch_alarm){
+        share_data.current_mode = share_data.current_mode == SYSTEM_PANIC ? MANUAL_MODE : SYSTEM_PANIC;
+        share_data.switch_alarm = 0;
     }
+
+    //no mode switch under SYSTEM_PANIC
+    if(share_data.current_mode == SYSTEM_PANIC)return;
 
     if(share_data.switch_mode){
         share_data.switch_mode = 0;

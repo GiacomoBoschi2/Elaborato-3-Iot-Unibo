@@ -23,8 +23,8 @@ Scheduler* sched;
 DoorTask* doorTask;
 ButtonTask* buttonTask;
 LcdTask* lcdTask;
-SerialReaderTask* serialTask;
-SerialWriterTask* serialTaskWriter;
+SerialWriterTask* serialTask;
+SerialReaderTask* serialTaskWriter;
 ModeTask* modeTask;
 SharedData share_data;
 
@@ -32,6 +32,7 @@ void initalizeSharedData(){
   share_data.door_rotation = 0;
   share_data.switch_mode = 0;
   share_data.current_temp = 0.0;
+  share_data.switch_alarm = 0;
 }
 
 void setup() {
@@ -49,11 +50,11 @@ void setup() {
   lcdTask = new LcdTask(LCDADDRESS,LCDCOLS,LCDROWS);
   lcdTask->init(BASE_PERIOD*4);
 
-  serialTask = new SerialReaderTask();
-  serialTask->init(BASE_PERIOD*4);
+  serialTask = new SerialWriterTask();
+  serialTask->init(BASE_PERIOD*6);
 
-  serialTaskWriter = new SerialWriterTask();
-  serialTaskWriter->init(BASE_PERIOD*6);
+  serialTaskWriter = new SerialReaderTask();
+  serialTaskWriter->init(BASE_PERIOD*4);
   
   modeTask = new ModeTask();
   modeTask->init(BASE_PERIOD*2);

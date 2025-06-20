@@ -15,6 +15,9 @@ void ButtonTask::init(int period){
 }
 
 void ButtonTask::tick(){
+    //no commands taken under alarm
+    if(share_data.current_mode == SYSTEM_PANIC)return;
+
     int press = button_handler->isPressed();
     if(!share_data.switch_mode){
         if(press){

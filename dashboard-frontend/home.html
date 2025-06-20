@@ -140,6 +140,15 @@ document.getElementById("manual").addEventListener("click", async () => {
     }
 });
 
+document.getElementById("alarm").addEventListener("click", async () => {
+    try {
+        const response = await fetch("./restore");
+        const data = await response.text(); 
+    } catch (error) {
+        console.error("Fetch error:", error);
+    }
+});
+
 // Initial load
 fetchDataAndUpdateChart();
 fetchJsonAndUpdateInfo();

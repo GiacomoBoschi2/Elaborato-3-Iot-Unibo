@@ -48,6 +48,14 @@ async def send_manual_mode(request):
         serialConnection.write(paylaod) 
     return web.Response(text="Request took", content_type='text/plain')
 
+async def restorePanic(request):
+    if arduino.get_state() == State.PANIC:
+        with serial_lock:
+            paylaod = b"\nP\n"
+            serialConnection.write(paylaod) #last temperature measured
+            arduino.system_state = State.NORMAL
+    return web.Response(text="Request took", content_type='text/plain')
+
 
 def message_handling_temp(client, userdata, msg):
     try:
@@ -125,6 +133,7 @@ def create_web_server():
     app.add_routes([web.get('/', hello),web.get('/data.txt',data_txt)])
     app.add_routes([web.get('/', hello),web.get('/info.json',data_json)])
     app.add_routes([web.get('/', hello),web.get('/manual',send_manual_mode)])
+    app.add_routes([web.get('/', hello)],web.get('/restore'))
     web.run_app(app)
 
 

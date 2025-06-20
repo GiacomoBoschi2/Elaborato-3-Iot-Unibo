@@ -44,12 +44,8 @@ class ArduinoCommunicator:
         timer_thread.start()
     
     def update_state(self,temperature):
-        if self.system_state == State.PANIC:
-            return self.system_state
-        
-        if self.setPanic:
-            self.setPanic = False
-            print("Panic mode hit")
+        if self.system_state == State.PANIC or self.setPanic == True:
+            self.setPanic = 0
             return State.PANIC
         
         if temperature< self.t1 :
@@ -57,18 +53,14 @@ class ArduinoCommunicator:
            
         if temperature <= self.t2:
             return State.HOT
+        
+        if self.system_state != State.TOO_HOT:
+            self.running = True
+            self.startTimer = True
         return State.TOO_HOT
 
     def update_rotation(self,temperature:float):
-        prev_state = self.get_state()
         self.system_state = self.update_state(temperature)
-        if self.system_state == State.TOO_HOT and prev_state!=State.TOO_HOT:
-            self.startTimer = True
-            self.running = True
-        
-        if self.system_state!=State.TOO_HOT and self.system_state!=State.PANIC:
-            self.running = False
-
         if(self.system_state==State.NORMAL):
             self.current_rotation = 0.0
         elif self.system_state==State.HOT:
