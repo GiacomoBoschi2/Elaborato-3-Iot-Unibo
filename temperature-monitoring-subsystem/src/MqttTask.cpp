@@ -10,6 +10,7 @@ int updated_freq = START_FREQUENCY;
 void callback(char* topic, byte* payload, unsigned int length) {
     String msg((char*)payload, length);
     updated_freq = (msg.toInt());
+    share_data.frequency = updated_freq;
 }
 
 MqttTask::MqttTask(char* mqtt_server){
@@ -28,40 +29,35 @@ void MqttTask::init(int period){
     reader.setClient(espClientReader);  
     reader.setServer(mqtt_server, 1883);
     reader.setCallback(callback);
+
+    reader.subscribe("frequency-topic");
+    reader.loop();
 }
 
 void MqttTask::tick(){
-    share_data.send_data = writer.connected();
+
     share_data.network_ok = (WiFi.status() == WL_CONNECTED);
-    share_data.receive_data = reader.connected();
-
-
-
+    share_data.mqtt_ok = reader.connected() && writer.connected();
     //send temperature if enough ticks have passed
     MqttTask::tick_counter+=Task::myPeriod;
 
     int to_send= tick_counter>=MqttTask::frequency;
-    if(to_send){
-        tick_counter = 0;
-        if(share_data.send_data && share_data.network_ok){
+    if(share_data.mqtt_ok  && share_data.network_ok){
+        if(share_data.send_data){
             char msg[BUF_SIZE];
             snprintf(msg, BUFSIZ+1, "%.2f", share_data.temperature);
             Serial.println(msg);
             writer.publish("temperature-topic", msg); 
-        }
-        else{
-            String clientId = String("esiot-2043-client-")+String(random(0xffff), HEX);
-            writer.connect(clientId.c_str());
+            share_data.send_data = 0;
         }
     }
-    //check if frequency reader is connected
-    if(!share_data.receive_data){
+    else if(share_data.network_ok){
         String clientId = String("esiot-2043-client-")+String(random(0xffff), HEX);
-        reader.connect(clientId.c_str());
+        String clientId2 = String("esiot-2043-client-")+String(random(0xffff), HEX);
+        writer.connect(clientId.c_str());
+        reader.connect(clientId2.c_str());
+        reader.subscribe("frequency-topic");
+        reader.loop();
     }
-
-    reader.subscribe("frequency-topic");
-    reader.loop();
-    frequency = updated_freq;
 }
 
