@@ -29,7 +29,6 @@ class subscriber_handler:
 
     def updateFrequency(self,frequency):
         message = self.frequency_publisher.publish("frequency-topic",f"{str(frequency)}")
-        print(message.is_published())
 
     def getLastMeasurment(self):
         if len(self.measures)==0:

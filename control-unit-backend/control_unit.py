@@ -44,7 +44,6 @@ async def data_json(request):
 async def send_manual_mode(request):
     with serial_lock:
         paylaod = b"\nX\n"
-        print("arrives")
         serialConnection.write(paylaod) 
     return web.Response(text="Request took", content_type='text/plain')
 
@@ -52,19 +51,26 @@ async def restorePanic(request):
     if arduino.get_state() == State.PANIC:
         with serial_lock:
             paylaod = b"\nP\n"
-            serialConnection.write(paylaod) #last temperature measured
+            serialConnection.write(paylaod) 
             arduino.system_state = State.NORMAL
     return web.Response(text="Request took", content_type='text/plain')
 
+def sendPanic():
+        if arduino.get_state() == State.PANIC:
+            with serial_lock:
+                paylaod = b"\nP\n"
+                serialConnection.write(paylaod) 
 
 def message_handling_temp(client, userdata, msg):
     try:
+        prev = arduino.get_state()
         temp = float(msg.payload.decode())
         mqtt_manager.update_temperatures(temp)
-        new_rotation =  arduino.update_rotation(temperature=float(temp))
         new_frequency = arduino.get_frequency()
         mqtt_manager.updateFrequency(new_frequency)
         arduino.update_rotation(temp)
+        if arduino.get_state() == State.PANIC and prev!=State.PANIC:
+            sendPanic()
         communicate_new_data()
         update_web_server_display_data()
     except Exception as e:
@@ -90,7 +96,6 @@ def read_door_rot():
                     data = serialConnection.readline()
                     if(not b'|' in data):
                         current_read_door_rotation = data.decode()
-                    print("data read:"+current_read_door_rotation)
         except Exception as e:
             print(e)
         
@@ -133,7 +138,7 @@ def create_web_server():
     app.add_routes([web.get('/', hello),web.get('/data.txt',data_txt)])
     app.add_routes([web.get('/', hello),web.get('/info.json',data_json)])
     app.add_routes([web.get('/', hello),web.get('/manual',send_manual_mode)])
-    app.add_routes([web.get('/', hello)],web.get('/restore'))
+    app.add_routes([web.get('/', hello),web.get('/restore',restorePanic)])
     web.run_app(app)
 
 

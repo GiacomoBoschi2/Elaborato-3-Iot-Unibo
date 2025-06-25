@@ -1,21 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-9.23
-10.44
-9.88
-10.44
-9.79
-=======
-13.26
-12.78
-14.07
-10.6
-13.66
->>>>>>> 93f60fc (Separated Task logic into Mqtt and Network connection)
-=======
-15.76
-14.87
-16.32
-15.68
-15.92
->>>>>>> 421c69f (added implementation for panic mode)
+16.08
+14.95
+14.31
+13.42
+15.6

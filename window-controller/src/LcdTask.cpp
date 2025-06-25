@@ -30,10 +30,11 @@ void LcdTask::tick(){
         lcd->message(msg,1,0);
     }
     else{
+        lcd->message(msg,0,1);
         sprintf(msg, "ALARM STATE");
         lcd->message(msg,1,0);
         sprintf(msg, "Wait for dashboard\0");
-        lcd->message(msg,1,0);
+        lcd->message(msg,2,0);
     }
    
 }
