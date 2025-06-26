@@ -33,8 +33,8 @@ class ArduinoCommunicator:
         self.current_rotation = 0
         self.command = b""
         self.system_state = State.NORMAL
-        self.t1 = float(15)
-        self.t2 = float(20)
+        self.t1 = float(13)
+        self.t2 = float(18)
         self.f1 = 3000 #milliseconds
         self.f2 = 1500
         self.startTimer = False
@@ -49,12 +49,18 @@ class ArduinoCommunicator:
             return State.PANIC
         
         if temperature< self.t1 :
+            self.startTimer = 0
+            self.setPanic = 0
+            self.running = 0
             return State.NORMAL
            
         if temperature <= self.t2:
+            self.startTimer = 0
+            self.setPanic = 0
+            self.running = 0
             return State.HOT
         
-        if self.system_state != State.TOO_HOT:
+        if self.system_state != State.TOO_HOT and self.system_state!=State.PANIC:
             self.running = True
             self.startTimer = True
         return State.TOO_HOT
