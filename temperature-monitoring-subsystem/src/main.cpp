@@ -35,7 +35,7 @@ void setup() {
   tempTask->init(BASE_PERIOD*4);
   sched->addTask(tempTask);
 
-  network_task = new NetworkTask("Tu WiFi l'americano 2.0","6NEUQRAU7F");
+  network_task = new NetworkTask("Bababui","Sassofono");
   network_task->init(BASE_PERIOD*2);
   sched->addTask(network_task);
 

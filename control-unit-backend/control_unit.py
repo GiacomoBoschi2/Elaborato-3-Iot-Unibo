@@ -120,9 +120,9 @@ def update_web_server_display_data():
     info = {}
     info["mode"] = str(arduino.get_state())
     info["last_m"] = mqtt_manager.getLastMeasurment()
-    info["avg"] = mqtt_manager.avarage()
-    info["max"] = mqtt_manager.current_max
-    info["min"] = mqtt_manager.current_min
+    info["avg"] = round(mqtt_manager.avarage(),2)
+    info["max"] = round(mqtt_manager.current_max,2)
+    info["min"] = round(mqtt_manager.current_min,2)
     info["door"] = current_read_door_rotation
     file_path = os.path.join('../dashboard-frontend', 'info.json.tmp')
     with open(file_path,"w") as f:

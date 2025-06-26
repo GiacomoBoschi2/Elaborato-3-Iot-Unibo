@@ -19,6 +19,7 @@ void NetworkTask::tick(){
     share_data.network_ok = (WiFi.status() == WL_CONNECTED);
     if(!share_data.network_ok){
         attempt_connect();
+        share_data.network_ok = (WiFi.status() == WL_CONNECTED);
     }
 }
 
@@ -26,8 +27,8 @@ void NetworkTask::attempt_connect(){
     WiFi.mode(WIFI_STA);
     WiFi.begin(NetworkTask::ssid, NetworkTask::password);
     int i = 0;
-    while (WiFi.status() != WL_CONNECTED && i<10) {
-        delay(5);
+    while (WiFi.status() != WL_CONNECTED && i<20) {
+        delay(1);
         i+=1;
     }
 
@@ -43,7 +44,5 @@ void NetworkTask::attempt_connect(){
         Serial.println("Connection failed");
          WiFi.printDiag(Serial);
     }
-
-
 }
 

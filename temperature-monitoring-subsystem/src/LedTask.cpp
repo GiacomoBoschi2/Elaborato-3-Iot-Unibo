@@ -15,7 +15,7 @@ void LedTask::init(int period){
 }
 
 void LedTask::tick(){
-    if(share_data.network_ok & share_data.send_data){
+    if(share_data.network_ok & share_data.mqtt_ok){
         greenLed->switchOn();
         redLed->switchOff();
     }

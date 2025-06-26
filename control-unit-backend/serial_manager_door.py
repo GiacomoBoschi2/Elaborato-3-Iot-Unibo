@@ -33,8 +33,8 @@ class ArduinoCommunicator:
         self.current_rotation = 0
         self.command = b""
         self.system_state = State.NORMAL
-        self.t1 = float(5.0)
-        self.t2 = float(10.0)
+        self.t1 = float(15)
+        self.t2 = float(20)
         self.f1 = 3000 #milliseconds
         self.f2 = 1500
         self.startTimer = False

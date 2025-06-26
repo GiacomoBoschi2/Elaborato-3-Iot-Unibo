@@ -13,5 +13,5 @@ void SerialWriterTask::init(int period){
 }
 
 void SerialWriterTask::tick(){
-    handler->tryWriteLine(share_data.auto_mode_rotation);
+    handler->tryWriteLine(share_data.window_rot);
 }

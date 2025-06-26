@@ -24,7 +24,7 @@ void SerialTask::tick(){
         
         //update data 
         if(data!=NULL){
-            share_data.auto_mode_rotation = atoi(data);
+            share_data.window_rot = atoi(data);
             data = strtok(nullptr,delimiter);
             if(data!=NULL){
                 double s = atof(data);

@@ -19,7 +19,7 @@ void TempSensorTask::tick(){
     check_time += saved_period;
 
     if(check_time>=share_data.frequency){
-        saved_period = 0;
+        check_time = 0;
         double measure = sensor->getTemperature();
         share_data.temperature = measure;
         share_data.send_data = 1;

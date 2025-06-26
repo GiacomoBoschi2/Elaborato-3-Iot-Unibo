@@ -115,6 +115,12 @@ function fetchDataAndUpdateChart() {
     .catch(err => console.error("Error fetching data:", err));
 }
 
+function formatState(state){
+  if (state=="State.PANIC") return "Alarm";
+  if (state=="State.NORMAL") return "Normal";
+  if (state=="State.HOT") return "Hot";
+  if (state=="State.TOO_HOT") return "Too Hot";
+}
 
 function fetchJsonAndUpdateInfo() {
   fetch("./info.json")  // Replace with your actual path to the .txt file
@@ -123,7 +129,7 @@ function fetchJsonAndUpdateInfo() {
       data = JSON.parse(info);
       document.getElementById('avg').textContent = "Avarage:"+data["avg"];
       document.getElementById('last').textContent = "Last measurement:"+data.last_m;
-      document.getElementById('mode').textContent = "Current system mode:"+data.mode;
+      document.getElementById('mode').textContent = "Current system mode:"+ formatState(data.mode);
       document.getElementById('lowest').textContent = "Current minimal temperature:"+data["min"];
       document.getElementById('highest').textContent = "Current maximal temperature:"+data["max"];
       document.getElementById('door').textContent = "Current door opening:"+data["door"];

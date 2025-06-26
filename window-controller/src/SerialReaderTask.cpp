@@ -33,7 +33,7 @@ void SerialReaderTask::handleRotationCommand(){
     if(data!=NULL){
 
         if(share_data.current_mode == AUTO_MODE){
-            share_data.auto_mode_rotation = atoi(data);
+            share_data.window_rot = atoi(data);
         }
         
         data = strtok(nullptr,delimiter);

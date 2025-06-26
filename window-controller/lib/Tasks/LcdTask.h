@@ -13,7 +13,11 @@ private:
   void updateMsg(const char* msg);
   Lcd* lcd;
   char* currentMsg;
-  enum State {DISPLAY_MANUAL_MODE,DO_NOT_DISPLAY_MANUAL_MODE} state;
+
+  //optimize calls
+  int prev_displayed_state = -1;
+  int prev_door_rot = -1;
+  double prev_temp = -1;
 };
 
 #endif

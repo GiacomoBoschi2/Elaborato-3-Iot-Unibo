@@ -19,23 +19,25 @@ void LcdTask::tick(){
     
     if(share_data.current_mode == MANUAL_MODE){
         lcd->message(msg,0,1);
-        sprintf(msg, "Manual Mode\0");
-        lcd->message(msg,1,0);
+        sprintf(msg, "Manual Mode");
+        lcd->message(msg,1,0);  
         sprintf(msg, "Temperature:%s",String(share_data.current_temp).c_str());
         lcd->message(msg,2,0);
     }
     else if(share_data.current_mode == AUTO_MODE){
         lcd->message(msg,0,1);
-        sprintf(msg, "Automatic Mode\0");
+        sprintf(msg, "Automatic Mode");
         lcd->message(msg,1,0);
     }
     else{
         lcd->message(msg,0,1);
         sprintf(msg, "ALARM STATE");
         lcd->message(msg,1,0);
-        sprintf(msg, "Wait for dashboard\0");
+        sprintf(msg, "Wait for dashboard");
         lcd->message(msg,2,0);
     }
+
+    prev_displayed_state = share_data.current_mode;
    
 }
 

@@ -13,7 +13,7 @@ struct SharedData
     int switch_alarm;
     int current_mode = 0;
     long door_rotation;
-    int auto_mode_rotation;
+    int window_rot;
     double current_temp = 0.0;
 };
 

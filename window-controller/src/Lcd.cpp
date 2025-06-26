@@ -13,7 +13,6 @@ void Lcd::init(){
 
 void Lcd::message(const char* msg,int line = 0,int clear = 0){
     if(clear){
-        lcd.backlight();
         lcd.clear();
     }
     lcd.setCursor(0,line);
