@@ -132,10 +132,19 @@ function fetchJsonAndUpdateInfo() {
       document.getElementById('mode').textContent = "Current system mode:"+ formatState(data.mode);
       document.getElementById('lowest').textContent = "Current minimal temperature:"+data["min"];
       document.getElementById('highest').textContent = "Current maximal temperature:"+data["max"];
-      document.getElementById('door').textContent = "Current door opening:"+data["door"];
     })
     .catch(err => console.error("Error fetching data:", err));
 }
+
+function fetchRotation() {
+  fetch("./rotation.txt")  // Replace with your actual path to the .txt file
+    .then(response => response.text())
+    .then(text => {
+      document.getElementById('door').textContent = "Current door opening:"+text;
+    })
+    .catch(err => console.error("Error fetching data:", err));
+}
+
 
 document.getElementById("manual").addEventListener("click", async () => {
     try {
@@ -159,8 +168,10 @@ document.getElementById("alarm").addEventListener("click", async () => {
 // Initial load
 fetchDataAndUpdateChart();
 fetchJsonAndUpdateInfo();
+fetchRotation();
 
 // Refresh every 5 seconds
 setInterval(fetchDataAndUpdateChart, 1500);
 setInterval(fetchJsonAndUpdateInfo, 1500);
+setInterval(fetchRotation, 500);
 </script> 

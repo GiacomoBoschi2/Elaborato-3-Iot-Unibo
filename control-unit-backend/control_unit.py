@@ -40,17 +40,26 @@ async def data_json(request):
         return web.Response(text=content, content_type='text/plain')
     except Exception as e:
         return web.Response(text=f"Error reading file: {e}", status=500)
+
+async def rotation(request):
+    file_path = os.path.join('../dashboard-frontend', 'rotation.txt')
+    try:
+        with open(file_path, 'r') as f:
+            content = f.read()
+        return web.Response(text=content, content_type='text/plain')
+    except Exception as e:
+        return web.Response(text=f"Error reading file: {e}", status=500)
     
 async def send_manual_mode(request):
     with serial_lock:
-        paylaod = b"\nX\n"
+        paylaod = b"X\n"
         serialConnection.write(paylaod) 
     return web.Response(text="Request took", content_type='text/plain')
 
 async def restorePanic(request):
     if arduino.get_state() == State.PANIC:
         with serial_lock:
-            paylaod = b"\nP\n"
+            paylaod = b"P\n"
             serialConnection.write(paylaod) 
             arduino.system_state = State.NORMAL
     return web.Response(text="Request took", content_type='text/plain')
@@ -58,7 +67,7 @@ async def restorePanic(request):
 def sendPanic():
         if arduino.get_state() == State.PANIC:
             with serial_lock:
-                paylaod = b"\nP\n"
+                paylaod = b"P\n"
                 serialConnection.write(paylaod) 
 
 def message_handling_temp(client, userdata, msg):
@@ -96,6 +105,10 @@ def read_door_rot():
                     data = serialConnection.readline()
                     if(not b'|' in data):
                         current_read_door_rotation = data.decode()
+                        file_path = os.path.join('../dashboard-frontend', 'rotation.txt.tmp')
+                        with open(file_path,"w") as f:
+                            f.write(str(current_read_door_rotation))
+                        os.rename(file_path, os.path.join('../dashboard-frontend', 'rotation.txt'))
         except Exception as e:
             print(e)
         
@@ -123,7 +136,6 @@ def update_web_server_display_data():
     info["avg"] = round(mqtt_manager.avarage(),2)
     info["max"] = round(mqtt_manager.current_max,2)
     info["min"] = round(mqtt_manager.current_min,2)
-    info["door"] = current_read_door_rotation
     file_path = os.path.join('../dashboard-frontend', 'info.json.tmp')
     with open(file_path,"w") as f:
         f.write(json.dumps(info))
@@ -137,6 +149,7 @@ def create_web_server():
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(os.path.join(os.getcwd(), "../dashboard-frontend")))
     app.add_routes([web.get('/', hello),web.get('/data.txt',data_txt)])
     app.add_routes([web.get('/', hello),web.get('/info.json',data_json)])
+    app.add_routes([web.get('/', hello),web.get('/rotation.txt',rotation)])
     app.add_routes([web.get('/', hello),web.get('/manual',send_manual_mode)])
     app.add_routes([web.get('/', hello),web.get('/restore',restorePanic)])
     web.run_app(app)
